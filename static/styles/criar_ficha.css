@@ -1,0 +1,161 @@
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background: #f3f3f3;
+height: 100vh;
+display: flex;
+}
+
+.form-container {
+    width: 650px;
+    margin: 30px auto;
+    background: #1f1f1f;
+    color: #fff;
+    padding: 18px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    font-family: Arial, sans-serif;
+    height: fit-content;
+}
+label { 
+    font-weight: 600;
+    display:block;
+    margin-top:12px; 
+}
+input, textarea, select {
+    width:100%;
+    padding:10px;
+    margin-top:6px;
+    border-radius:6px;
+    border:1px solid #ddd;
+}
+.actions { 
+    margin-top:16px;
+    display:flex;
+    gap:8px;
+}
+button { 
+    padding:10px 14px; 
+    border:none; 
+    border-radius:6px; 
+    cursor:pointer; }
+.primary { 
+    background:#2f2f2f; 
+    color:white;
+}
+.primary:hover { 
+    background: #444;
+}
+
+.ficha-preview {
+    width: 440px;
+    background: #1f1f1f;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    height: 90vh; /* FIXA uma altura máxima */
+    overflow-y: auto; /* Habilita scroll apenas dentro dela */
+    position: fixed;       /* << ATIVA a fixação */
+    top: 30px;             /* distância do topo da tela */
+    right: 12px; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    font-family: Arial, sans-serif;
+}
+
+
+.ficha-preview h2 {
+    margin-top: 0;
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.preview-section {
+    background: #2a2a2a;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.preview-section h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    color: #f1f1f1;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+}
+
+.preview-section p {
+    margin: 4px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.preview-section strong {
+    color: #d4d4d4;
+}
+
+.construtores, .atributos {
+    margin-top: 20px;
+    padding: 15px;
+    background: #2a2a2a;
+    border-radius: 10px;
+}
+
+.construtores h3, .atributos h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #f1f1f1;
+}
+
+.construtores label, .atributos label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    color: #ddd;
+}
+
+.construtores select, .atributos input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    background: #2f2f2f;
+    border: 1px solid #444;
+    color: #fff;
+}
+
+.white-line{
+    color: #ddd;
+}
+
+/* Botão de retorno*/
+.back-btn {
+    border-radius: 10px;
+    overflow-y: auto; /* Habilita scroll apenas dentro dela */
+    position: fixed;       /* << ATIVA a fixação */
+    top: 30px;             /* distância do topo da tela */
+    left: 20px; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    font-family: Arial, sans-serif;
+}
+
+.btn-voltar {
+    padding: 8px 16px;
+    background-color: #2f2f2f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-voltar:hover {
+    background-color: #444;
+}
+
+.edit {
+    display: flex;
+    gap: 20px;
+}
+
+.edit input {
+    text-align: end;
+}

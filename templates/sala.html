@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<link rel="stylesheet" href="{{url_for('static', filename='styles/sala.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='styles/mecha.css')}}">
+<div class="sala-container">
+
+    <!-- MENU ESQUERDA -->
+    <aside class="menu-sala">
+        <h2>{{ sala.nome }}</h2>
+        <input type="hidden" name="sala_id" id="sala_id" value="{{sala.id}}">
+
+        <button class="menu-item" data-view="0">
+            🎲 Comandos do Mestre
+        </button>
+
+        <div class="menu-divider"></div>
+
+        <h3>Fichas</h3>
+        {% for ficha in fichas %}
+            <button class="menu-item" data-view="{{ficha['id']}}">{{ ficha['nome_personagem'] }}</button>
+        {% endfor %}
+
+        <div class="menu-divider"></div>
+        
+        <a href="{{ url_for('fichas.criar_ficha', sala_id=sala.id) }}"><button class="menu-item">Criar ficha</button></a>
+        <a href="/"><button class="menu-item">Voltar</button></a>
+        
+    </aside>
+
+    <!-- ÁREA CENTRAL DINÂMICA -->
+    <main class="conteudo">
+        <div id="view-container" class="view">
+            <h2>Selecione algo no menu</h2>
+        </div>
+    </main>
+
+    <!-- LOGS -->
+    <aside class="logs">
+        <h3>Logs</h3>
+        <div id="logs-container">
+            <!-- logs irão aparecer aqui via JS -->
+        </div>
+    </aside>
+
+</div>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="/static/js/sockets.js"></script>
+<script src="/static/js/teste.js"></script>
+<script src="/static/js/sala.js"></script>
+<script src="/static/js/sala_ficha_controller.js"></script>
+<script src="/static/js/sala_mecha_controller.js" defer></script>
+{% endblock %}

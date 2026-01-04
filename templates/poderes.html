@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/poderes.css') }}">
+<div class="editor-poderes">
+    <h2>Editar Poderes</h2>
+    <div class="top-content">
+        <h4>{{ ficha.nome_personagem }}</h4>
+        
+        <div class="back-btn">
+            <a href="/sala/{{ ficha.sala_id }}"><button type="button">Voltar</button></a>
+        </div>
+    </div>
+
+    <div class="menu-divider"></div>
+
+    <div class="poderes-secao">
+        <h3>Poderes da ficha</h3>
+        <div class="poderes-grid" id="poderes-associados"></div>
+    </div>
+
+    <div class="menu-divider"></div>
+
+    <div class="poderes-secao">
+        <h3>Poderes disponíveis</h3>
+        <div class="poderes-grid" id="poderes-disponiveis"></div>
+    </div>
+</div>
+
+
+
+<script>
+window.INITIAL_DATA = {
+    ficha: {{ ficha | tojson }},
+    poderes: {{ poderes | tojson }}
+};
+
+const fichaAtual = window.INITIAL_DATA.ficha;
+const poderesDisponiveis = window.INITIAL_DATA.poderes;
+
+// abrir editor
+renderEditorPoderes({
+    ficha: fichaAtual,
+    poderes: poderesDisponiveis
+});
+
+
+
+function renderEditorPoderes(data) {
+    const equipados = data.ficha.poderes;
+    const todos = data.poderes;
+
+    const equipadosIds = equipados.map(e => e.id);
+
+    const disponiveis = todos.filter(
+        e => !equipadosIds.includes(e.id)
+    );
+
+    renderListaPoderes(
+        "poderes-disponiveis",
+        disponiveis,
+        adicionarPoder
+    );
+
+    renderListaPoderes(
+        "poderes-ficha",
+        equipados,
+        removerPoder
+    );
+}
+
+function renderEditorPoderes(data) {
+    const associados = document.getElementById("poderes-associados");
+    const disponiveis = document.getElementById("poderes-disponiveis");
+
+    associados.innerHTML = "";
+    disponiveis.innerHTML = "";
+
+    // Poderes associados
+    data.ficha['poderes'].forEach(poder => {
+        const card = document.createElement("div");
+        card.classList.add("poder-card");
+
+        card.innerHTML = `
+            <div class="poder-header">
+                <h4>${poder.nome}</h4>
+            </div>
+            <p class="poder-descricao">
+                ${poder.descricao.replace(/\n/g, "<br>")}
+            </p>
+            <button class="poder-btn remover"
+                onclick="removerPoder(${poder.id})">
+                Remover
+            </button>
+        `;
+
+        associados.appendChild(card);
+    });
+
+    // Poderes disponíveis
+    data.poderes.forEach(poder => {
+        const card = document.createElement("div");
+        card.classList.add("poder-card");
+
+        card.innerHTML = `
+            <div class="poder-header">
+                <h4>${poder.nome}</h4>
+            </div>
+            <p class="poder-descricao">
+                ${poder.descricao.replace(/\n/g, "<br>")}
+            </p>
+            <button class="poder-btn adicionar"
+                onclick="adicionarPoder(${poder.id})">
+                Adicionar
+            </button>
+        `;
+
+        disponiveis.appendChild(card);
+    });
+}
+
+
+async function adicionarPoder(poderId) {
+    showLoader("Adicionando poder...");
+    await fetch(`/ficha/${fichaAtual["id"]}/poderes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ poder_id: poderId })
+    });
+
+    recarregarEditorPoderes();
+}
+
+async function removerPoder(poderId) {
+    showLoader("Removendo poder...");
+    await fetch(`/ficha/${fichaAtual["id"]}/poderes/${poderId}`, {
+        method: "DELETE"
+    });
+
+    recarregarEditorPoderes();
+}
+
+async function recarregarEditorPoderes() {
+    const res = await fetch(`/ficha/${fichaAtual["id"]}/poderes/json`);
+    const data = await res.json();
+    hideLoader();
+    renderEditorPoderes(data);
+}
+
+
+</script>
+{% endblock %}

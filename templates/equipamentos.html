@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<link rel="stylesheet" href="{{url_for('static', filename='styles/equipamento.css')}}">
+<section class="equipamentos-editor">
+    <h2>Gerenciar Equipamentos</h2>
+    <div class="top-content">
+        <h4>{{ ficha.nome_personagem }}</h4>
+        
+        <div class="back-btn">
+            <a href="/sala/{{ ficha.sala_id }}"><button type="button">Voltar</button></a>
+        </div>
+    </div>
+
+    <div class="equipamentos-grid">
+
+        <!-- DISPONÍVEIS -->
+        <div class="equipamentos-coluna">
+            <h3>Disponíveis</h3>
+            <ul id="equipamentos-disponiveis">
+            </ul>
+        </div>
+
+        <!-- EQUIPADOS -->
+        <div class="equipamentos-coluna">
+            <h3>Equipados</h3>
+            <ul id="equipamentos-ficha">
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="acoes">
+        <button onclick="fecharEditorEquipamentos()">Fechar</button>
+    </div>
+</section>
+
+
+<script>
+window.INITIAL_DATA = {
+    ficha: {{ ficha | tojson }},
+    equipamentos: {{ equipamentos | tojson }}
+};
+
+const fichaAtual = window.INITIAL_DATA.ficha;
+const equipamentosDisponiveis = window.INITIAL_DATA.equipamentos;
+
+// abrir editor
+renderEditorEquipamentos({
+    ficha: fichaAtual,
+    equipamentos: equipamentosDisponiveis
+});
+
+
+
+function renderEditorEquipamentos(data) {
+    const equipados = data.ficha.equipamentos;
+    const todos = data.equipamentos;
+
+    const equipadosIds = equipados.map(e => e.id);
+
+    const disponiveis = todos.filter(
+        e => !equipadosIds.includes(e.id)
+    );
+
+    renderListaEquipamentos(
+        "equipamentos-disponiveis",
+        disponiveis,
+        adicionarEquipamento
+    );
+
+    renderListaEquipamentos(
+        "equipamentos-ficha",
+        equipados,
+        removerEquipamento
+    );
+}
+
+function renderListaEquipamentos(containerId, lista, actionFn) {
+    const ul = document.getElementById(containerId);
+    ul.innerHTML = "";
+
+    lista.forEach(eq => {
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+            <span style="width: 20%">${eq.nome}</span>
+            <span style="width: 30%">${eq.tipo_arma}</span>
+            <span style="width: 30%">${eq.tipo_dano}</span>
+            <span style="width: 10%">${eq.dano == null ? "" : eq.dano}</span>
+            <button data-id="${eq.id}">
+                ${actionFn === adicionarEquipamento ? "+" : "−"}
+            </button>
+        `;
+
+        li.querySelector("button").onclick = () => actionFn(eq.id);
+        ul.appendChild(li);
+    });
+}
+
+async function adicionarEquipamento(equipamentoId) {
+    showLoader("Adicionando equipamento...");
+    await fetch(`/ficha/${fichaAtual["id"]}/equipamentos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ equipamento_id: equipamentoId })
+    });
+
+    recarregarEditorEquipamentos();
+}
+
+async function removerEquipamento(equipamentoId) {
+    showLoader("Removendo equipamento...");
+    await fetch(`/ficha/${fichaAtual["id"]}/equipamentos/${equipamentoId}`, {
+        method: "DELETE"
+    });
+
+    recarregarEditorEquipamentos();
+}
+
+async function recarregarEditorEquipamentos() {
+    const res = await fetch(`/ficha/${fichaAtual["id"]}/equipamentos/json`);
+    const data = await res.json();
+    hideLoader();
+    renderEditorEquipamentos(data);
+}
+
+
+</script>
+{% endblock %}

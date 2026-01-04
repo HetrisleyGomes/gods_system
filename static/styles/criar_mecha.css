@@ -1,0 +1,151 @@
+/* ===== FORM MECHA ===== */
+.mecha-form {
+    max-width: 820px;
+    margin: 40px auto;
+    background: #1f1f1f;
+    color: #eee;
+    padding: 32px;
+    border-radius: 14px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.6);
+    font-family: Arial, sans-serif;
+}
+
+/* Título */
+.mecha-form h2 {
+    margin-bottom: 24px;
+    text-align: center;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+}
+
+/* Agrupamento */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Inputs base */
+.mecha-form input[type="text"],
+.mecha-form input[type="number"],
+.mecha-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background: #2a2a2a;
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+.mecha-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Focus */
+.mecha-form input:focus,
+.mecha-form textarea:focus {
+    outline: none;
+    border-color: #5dade2;
+    box-shadow: 0 0 6px rgba(93,173,226,0.4);
+}
+
+/* Fieldsets */
+.mecha-form fieldset {
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 24px;
+}
+
+.mecha-form legend {
+    padding: 0 10px;
+    font-weight: bold;
+    color: #ccc;
+}
+
+/* Grids */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+/* Labels com input dentro */
+.grid-2 label,
+.grid-3 label {
+    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== HABILIDADES ===== */
+#habilidades-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.habilidade-input {
+    background: #262626;
+    border: 1px dashed #444;
+    padding: 8px 10px;
+    border-radius: 6px;
+    color: #eee;
+    text-overflow: ellipsis;
+}
+
+/* Botão adicionar habilidade */
+.mecha-form button[type="button"] {
+    align-self: flex-start;
+    background: transparent;
+    border: 1px solid #5dade2;
+    color: #5dade2;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mecha-form button[type="button"]:hover {
+    background: #5dade2;
+    color: #111;
+}
+
+/* ===== BOTÃO PRINCIPAL ===== */
+.btn-primary {
+    width: 100%;
+    margin-top: 24px;
+    padding: 14px;
+    background: linear-gradient(135deg, #5dade2, #2874a6);
+    border: none;
+    border-radius: 10px;
+    color: #111;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(93,173,226,0.5);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}

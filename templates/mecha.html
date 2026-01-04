@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<link rel="stylesheet" href="{{url_for('static', filename='styles/mecha_view.css')}}">
+<div class="mecha-view">
+
+    <!-- Cabeçalho -->
+    <header class="mecha-header">
+        <h2>🤖 <span id="mecha-nome"></span></h2>
+
+        <div class="status-bar">
+            <div class="status editavel"
+                 data-tipo="vida"
+                 data-id=""
+                 data-atual=""
+                 data-max="">
+                ❤️ Vida
+                <span class="valor"></span> /
+                <span class="max"></span>
+            </div>
+
+            <div class="status">
+                ⚡ Energia
+                <span id="energia-atual"></span> /
+                <span id="energia-max"></span>
+            </div>
+
+            <div class="status">
+                🛡️ Armadura
+                <span id="armadura"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Atributos -->
+    <section class="mecha-atributos">
+        <h3>Atributos</h3>
+        <div class="atributos-grid">
+            <button data-atributo="combate">Combate</button>
+            <button data-atributo="pontaria">Pontaria</button>
+            <button data-atributo="defesa">Defesa</button>
+            <button data-atributo="forca">Força</button>
+        </div>
+    </section>
+
+    <!-- Armas -->
+    <section class="mecha-armas">
+        <h3>Armas</h3>
+        <div class="armas-grid" id="armas-container"></div>
+    </section>
+
+    <!-- Habilidades -->
+    <section class="mecha-habilidades">
+        <h3>Habilidades</h3>
+        <ul id="habilidades-list"></ul>
+    </section>
+
+</div>
+
+<script>
+    function renderMecha(mecha, ficha) {
+
+    document.getElementById("mecha-nome").textContent = mecha.nome;
+
+    // Vida
+    const vida = document.querySelector(".status.editavel");
+    vida.dataset.id = mecha.id;
+    vida.dataset.atual = mecha.vida_atual;
+    vida.dataset.max = mecha.vida;
+    vida.querySelector(".valor").textContent = mecha.vida_atual;
+    vida.querySelector(".max").textContent = mecha.vida;
+
+    // Energia (vem da ficha)
+    document.getElementById("energia-atual").textContent = ficha.energia_atual;
+    document.getElementById("energia-max").textContent = ficha.energia;
+
+    document.getElementById("armadura").textContent = mecha.armadura;
+
+    // Atributos
+    document.querySelectorAll("[data-atributo]").forEach(btn => {
+        const attr = btn.dataset.atributo;
+        btn.textContent = `${btn.textContent} (${mecha[attr]})`;
+
+        // 🔮 GANCHO FUTURO
+        btn.onclick = () => {
+            console.log("Rolagem:", attr, mecha[attr]);
+        };
+    });
+
+    // Armas
+    const armasContainer = document.getElementById("armas-container");
+    armasContainer.innerHTML = "";
+
+    mecha.armas.forEach(arma => {
+        armasContainer.innerHTML += `
+            <div class="arma-card">
+                <h4>${arma.nome}</h4>
+                <p>Dano: ${arma.dano}</p>
+                <p>Tipo: ${arma.tipo}</p>
+                <small>${arma.efeito}</small>
+            </div>
+        `;
+    });
+
+    // Habilidades
+    const habilidadesList = document.getElementById("habilidades-list");
+    habilidadesList.innerHTML = "";
+
+    mecha.habilidades.forEach(hab => {
+        const li = document.createElement("li");
+        li.textContent = hab;
+        habilidadesList.appendChild(li);
+    });
+}
+
+</script>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<link rel="stylesheet" href="{{url_for('static', filename='styles/main.css')}}">
+<div class="left-panel">
+    <h2>Salas</h2>
+    {% for sala in salas %}
+        <div class="sala">
+            <span>{{ sala.nome }}</span>
+            <a href="/sala/{{ sala.id }}"><button>Acessar</button></a>
+        </div>
+    {% endfor %}
+
+    <div class="sala">
+        <span>Criar sala</span>
+        <a href="/criar_sala"><button>Criar</button></a>
+    </div>
+</div>
+
+<div class="right-panel" id="painel-fichas">
+    <h4>Selecione uma sala</h4>
+</div>
+
+{% endblock %}

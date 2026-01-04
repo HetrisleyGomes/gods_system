@@ -1,0 +1,76 @@
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background: #f3f3f3;
+height: 100vh;
+display: flex;
+}
+
+/* Lado esquerdo */
+.left-panel {
+    width: 30%;
+    background: #1e1e2f;
+    color: white;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.left-panel h2 {
+    margin-top: 0;
+    font-size: 22px;
+}
+
+.sala {
+    background: #2c2c40;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sala button {
+    background: #4CAF50;
+    border: none;
+    padding: 6px 12px;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Lado direito */
+.right-panel {
+    width: 70%;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.right-panel h2 {
+    margin-top: 0;
+    font-size: 22px;
+}
+
+.ficha {
+    background: white;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ficha button {
+    background: #007BFF;
+    border: none;
+    padding: 6px 12px;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+h4 {
+    font: 1em sans-serif;
+}

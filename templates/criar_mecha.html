@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<link rel="stylesheet" href="{{url_for('static', filename='styles/criar_mecha.css')}}">
+<form id="mecha-form" class="mecha-form" method="POST" action="{{ url_for('utils.form_criar_mecha') }}">
+
+    <!-- associação -->
+    <input type="hidden" name="ficha_id" value="{{ ficha_id }}">
+    <input type="hidden" id="is_editing" value="{{ is_editing }}">
+
+    <h2>Construção do Mecha</h2>
+
+    <!-- Dados básicos -->
+    <div class="form-group">
+        <label>Nome do Mecha</label>
+        <input type="text" name="nome" maxlength="50" required>
+    </div>
+
+    <!-- Status -->
+    <fieldset>
+        <legend>Status</legend>
+
+        <div class="grid-3">
+            <label>Vida <input type="number" name="vida" min="0" value="100" required></label>
+            <label>Armadura <input type="number" name="armadura" min="0" value="8"></label>
+            <label>Defesa <input type="number" name="defesa" min="0" value="3"></label>
+        </div>
+
+        <div class="grid-3">
+            <label>Força <input type="number" name="forca" min="0" value="3"></label>
+            <label>Combate <input type="number" name="combate" min="0" value="3"></label>
+            <label>Pontaria <input type="number" name="pontaria" min="0" value="3"></label>
+        </div>
+    </fieldset>
+
+    <!-- Arma -->
+    <fieldset>
+        <legend>Armas do Mecha</legend>
+
+        <div id="armas-container"></div>
+
+        <button type="button" onclick="adicionarArma()">+ Adicionar arma</button>
+    </fieldset>
+
+    <input type="hidden" name="armas_json" id="armas_json">
+
+
+    <!-- Habilidades -->
+    <fieldset>
+        <legend>Habilidades</legend>
+
+        <div id="habilidades-container">
+            <input type="text" class="habilidade-input" placeholder="Ex: Sobrecarga Térmica">
+        </div>
+
+        <button type="button" onclick="adicionarHabilidade()">+ Adicionar habilidade</button>
+
+        <!-- aqui vai o JSON final -->
+        <input type="hidden" name="habilidades" id="habilidades-json">
+    </fieldset>
+
+    <button type="submit" class="btn-primary">Salvar Mecha</button>
+
+</form>
+
+<script>
+window.INITIAL_DATA = {
+    ficha: {{ ficha['body'] | tojson }}
+};
+
+const ficha = window.INITIAL_DATA.ficha;
+
+function carregamentoInicial(){
+    const container = document.getElementById("habilidades-container");
+
+    const input_arquetipo = document.createElement("input");
+    const input = document.createElement("input");
+
+    container.innerText = "";
+
+    switch (ficha['arquetipo']) {
+        case 'combatente':
+            value = Number(document.getElementsByName("combate")[0].value);
+            value += 2
+            document.getElementsByName("combate")[0].value = value;
+            break;
+        case 'genio':
+            contructor(input_arquetipo, container, "Gênio: Detectar pontos fracos em rolagens de percepção.");
+            break;
+        case 'celere':
+            console.log("veio")
+            contructor(input_arquetipo, container, "Célere: Equipado com propulsores. Aumentando velocidade e permitindo esquivas.");
+            break;
+        case 'cinico':
+            value = Number(document.getElementsByName("defesa")[0].value);
+            value += 2
+            document.getElementsByName("defesa")[0].value = value;
+            break;
+        case 'viajante':
+            contructor(input_arquetipo, container, "Viajante: Pode se mover em longas distâncias e teleportar.");
+            break;
+        case 'trágico':
+            contructor(input_arquetipo, container, "Canalizar auto-reparos: Seu zord possui sistemas de emergência criados para sustentação de danos. Você pode gastar uma ação completa para recuperar 4d10 de seus pontos de vida.");
+            break;
+        case 'vanguarda':
+            value = Number(document.getElementsByName("armadura")[0].value);
+            value += 2
+            document.getElementsByName("armadura")[0].value = value;
+            break;
+        case 'celere':
+            value = Number(document.getElementsByName("pontaria")[0].value);
+            value += 2
+            document.getElementsByName("pontaria")[0].value = value;
+            break;
+    }
+    
+    switch (ficha['cor']) {
+        case 'vermelho':
+            contructor(input, container, "Ranger Vermelho: Possui uma arma extra.")
+            break;
+        case 'azul':
+            contructor(input, container, "Ranger Azul: Recebe “Vantagem” em rolagens de ataque.");
+            break;
+        case 'preto':
+            contructor(input, container, "Couraça reforçada: Seu zord possui um chassi aprimorado, capaz de sustentar mais dano, quando escolher a habilidade, adicione +5 em armadura e +4 em defesa.");
+            break;
+        case 'amarelo':
+            contructor(input, container, "Tração Motora: A potência de seu zord é aprimorada, permitindo uma melhor movimentação, consumindo 2 pontos de energia, você recebe +3 em ações físicas e Imunidade a controle coletivo.");
+            break;
+        case 'rosa':
+            contructor(input, container, "Ranger Rosa:Dano de energia regenera os pontos gastos");
+            break;
+        case 'verde':
+            contructor(input, container, "Ranger Verde: Pontos de energia são duplicados");
+            break;
+        case 'branco':
+            contructor(input, container, "Ranger Branco: Recebe “Forma de combate”");
+            break;
+    }
+}
+
+// ARMAS
+function criarArmaHTML(index) {
+    return `
+    <div class="arma-card" data-index="${index}">
+        <div class="grid-2">
+            <label>Nome da Arma
+                <input type="text" class="arma-nome">
+            </label>
+            <label>Dano
+                <input type="text" class="arma-dano">
+            </label>
+        </div>
+
+        <div class="grid-2">
+            <label>Tipo
+                <input type="text" class="arma-tipo">
+            </label>
+            <label>Efeito
+                <input type="text" class="arma-efeito">
+            </label>
+        </div>
+
+        <button type="button" class="remover-arma" onclick="removerArma(this)">
+            Remover arma
+        </button>
+        <hr>
+    </div>
+    `;
+}
+
+let contadorArmas = 0;
+
+function adicionarArma() {
+    const container = document.getElementById("armas-container");
+    container.insertAdjacentHTML("beforeend", criarArmaHTML(contadorArmas));
+    contadorArmas++;
+}
+
+function removerArma(botao) {
+    botao.closest(".arma-card").remove();
+}
+
+function coletarArmas() {
+    const armas = [];
+
+    document.querySelectorAll(".arma-card").forEach(card => {
+        const nome = card.querySelector(".arma-nome").value.trim();
+        const dano = card.querySelector(".arma-dano").value.trim();
+        const tipo = card.querySelector(".arma-tipo").value.trim();
+        const efeito = card.querySelector(".arma-efeito").value.trim();
+
+        if (!nome) return; // ignora armas vazias
+
+        armas.push({ nome, dano, tipo, efeito });
+    });
+
+    return armas;
+}
+
+// HABILIDADES
+function contructor(input, container, value){
+    input.type = "text";
+    input.className = "habilidade-input";
+    input.value = value
+
+    container.appendChild(input);
+}
+
+
+function adicionarHabilidade() {
+    const container = document.getElementById("habilidades-container");
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "habilidade-input";
+    input.placeholder = "Nova habilidade";
+
+    container.appendChild(input);
+}
+
+// Antes de enviar o formulário
+document.getElementById("mecha-form").addEventListener("submit", () => {
+    const habilidades = [];
+    document.querySelectorAll(".habilidade-input").forEach(inp => {
+        if (inp.value.trim() !== "") {
+            habilidades.push(inp.value.trim());
+        }
+    });
+
+    document.getElementById("habilidades-json").value = JSON.stringify(habilidades);
+
+
+    const armas = coletarArmas();
+    document.getElementById("armas_json").value = JSON.stringify(armas);
+
+
+});
+
+
+if (document.getElementById("is_editing").value === "False"){
+    carregamentoInicial();
+}
+</script>
+
+{% endblock %}

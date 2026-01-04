@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<link rel="stylesheet" href="{{url_for('static', filename='styles/criar_ficha.css')}}">
+<div class="form-container">
+<h2>Criar Ficha</h2>
+
+<div class="back-btn">
+    <a href="/sala/{{ ficha.sala_id }}"><button type="button">Cancelar</button></a>
+</div>
+
+
+<!-- Recebe sala_id do servidor via Jinja -->
+<form id="criar-ficha-form" action="{{ url_for('fichas.form_editar_ficha') }}" method="POST">
+    <input type="hidden" id="ficha_id" name="ficha_id" value="{{ id }}">
+    <input type="hidden" id="sala_id" name="sala_id" value="{{ ficha.sala_id }}">
+    <input type="hidden" id="vida_atual" name="vida_atual" value="{{ ficha.vida_atual }}">
+    <input type="hidden" id="energia_atual" name="energia_atual" value="{{ ficha.energia_atual }}">
+    
+    <div class="atributos">
+        <label for="nome_personagem">Nome do personagem</label>
+        <input type="text" id="nome_personagem" name="nome_personagem" maxlength="50" value="{{ ficha.nome_personagem }}">
+        <hr class="white-line">
+        <div class="atributos edit">
+            <div>
+                <label for="vida">Vida máxima</label>
+                <input type="number" id="vida" name="vida" min="0" value="{{ ficha.vida }}">
+            </div>
+            <div>
+                <label for="energia">Energia máxima</label>
+                <input type="number" id="energia" name="energia" min="0" value="{{ ficha.energia }}">
+            </div>
+            <div>
+                <label for="armadura">Armadura</label>
+                <input type="number" id="armadura" name="armadura" min="0" value="{{ ficha.armadura }}">
+            </div>
+        </div>
+        <hr class="white-line">
+        <div class="atributos edit">
+            <div>
+                <label for="xp">Experiência</label>
+                <input type="number" id="xp" name="xp" min="0" value="{{ ficha.xp }}">
+            </div>
+            <div>
+                <label for="nivel">Nível</label>
+                <input type="number" id="nivel" name="nivel" min="0" value="{{ ficha.nivel }}">
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== CONSTRUTORES ========== -->
+    <div class="construtores">
+        <h3>Construtores</h3>
+
+        <!-- Cor -->
+        <label for="cor">Cor</label>
+        <select id="cor" name="cor" data-preview="cor" required>
+            <option value="vermelho" {% if ficha.cor == 'vermelho' %}selected{% endif %}>Vermelho</option>
+            <option value="azul" {% if ficha.cor == 'azul' %}selected{% endif %}>Azul</option>
+            <option value="amarelo" {% if ficha.cor == 'amarelo' %}selected{% endif %}>Amarelo</option>
+            <option value="rosa" {% if ficha.cor == 'rosa' %}selected{% endif %}>Rosa</option>
+            <option value="verde" {% if ficha.cor == 'verde' %}selected{% endif %}>Verde</option>
+            <option value="preto" {% if ficha.cor == 'preto' %}selected{% endif %}>Preto</option>
+            <option value="branco" {% if ficha.cor == 'branco' %}selected{% endif %}>Branco</option>
+        </select>
+
+        <!-- Espécie -->
+        <label for="especie">Espécie</label>
+        <select id="especie" name="especie" data-preview="especie" required>
+            <option value="humano" {% if ficha.especie == 'humano' %}selected{% endif %}>Humanos</option>
+            <option value="sphynx" {% if ficha.especie == 'sphynx' %}selected{% endif %}>Sphynx</option>
+            <option value="sirians" {% if ficha.especie == 'sirians' %}selected{% endif %}>Sirians</option>
+            <option value="android" {% if ficha.especie == 'android' %}selected{% endif %}>Android</option>
+            <option value="aquitiano" {% if ficha.especie == 'aquitiano' %}selected{% endif %}>Aquitiano</option>
+            <option value="sauriano" {% if ficha.especie == 'sauriano' %}selected{% endif %}>Sauriano</option>
+            <option value="rafkan" {% if ficha.especie == 'rafkan' %}selected{% endif %}>Rafkan</option>
+        </select>
+
+        <!-- Arquétipo -->
+        <label for="arquetipo">Arquétipo</label>
+        <select id="arquetipo" name="arquetipo" data-preview="arquetipo" required>
+            <option value="" selected disabled>Selecione um arquétipo</option>
+            <option value="combatente" {% if ficha.arquetipo == 'combatente' %} selected {% endif %}>Combatente</option>
+            <option value="genio" {% if ficha.arquetipo == 'genio' %} selected {% endif %}>Gênio</option>
+            <option value="celere" {% if ficha.arquetipo == 'celere' %} selected {% endif %}>Célere</option>
+            <option value="guardiao" {% if ficha.arquetipo == 'guardiao' %} selected {% endif %}>Guardião</option>
+            <option value="peregrino" {% if ficha.arquetipo == 'peregrino' %} selected {% endif %}>Peregrino</option>
+            <option value="sobrevivente" {% if ficha.arquetipo == 'sobrevivente' %} selected {% endif %}>Sobrevivente</option>
+            <option value="atirador" {% if ficha.arquetipo == 'atirador' %} selected {% endif %}>Atirador</option>
+            <option value="vanguarda" {% if ficha.arquetipo == 'vanguarda' %} selected {% endif %}>Vanguarda</option>
+            <option value="a_sombra" {% if ficha.arquetipo == 'a_sombra' %} selected {% endif %}>A Sombra</option>
+        </select>
+    </div>
+
+    <div id="atributos_container">
+        <div class="atributos">
+            <h3>Atributos</h3> <span class="white-line">Pontos restantes: </span><span id="pontos-restantes" class="white-line">5</span>
+            <label for="forca">forca: <input type="number" id="forca" name="forca" class="extra" min="0" max="3" value="{{ ficha.forca }}"></label>
+            <label for="constituicao">constituicao: <input type="number" id="constituicao" name="constituicao" class="extra" min="0" max="3" value="{{ ficha.constituicao }}"></label>
+            <label for="inteligencia">inteligencia: <input type="number" id="inteligencia" name="inteligencia" class="extra" min="0" max="3" value="{{ ficha.inteligencia }}"></label>
+            <label for="destreza">destreza: <input type="number" id="destreza" name="destreza" class="extra" min="0" max="3" value="{{ ficha.destreza }}"></label>
+            <label for="carisma">carisma: <input type="number" id="carisma" name="carisma" class="extra" min="0" max="3" value="{{ ficha.carisma }}"></label>
+            <hr class="white-line">
+            <label for="combate">combate: <input type="number" id="combate" class="extra" name="combate" min="0" max="3" value="{{ ficha.combate }}"></label>
+            <label for="atletismo">atletismo: <input type="number" id="atletismo" class="extra" name="atletismo" min="0" max="3" value="{{ ficha.atletismo }}"></label>
+            <label for="tecnologia">tecnologia: <input type="number" id="tecnologia" class="extra" name="tecnologia" min="0" max="3" value="{{ ficha.tecnologia }}"></label>
+            <label for="percepcao">percepcao: <input type="number" id="percepcao" class="extra" name="percepcao" min="0" max="3" value="{{ ficha.percepcao }}"></label>
+            <label for="conhecimento">conhecimento: <input type="number" id="conhecimento" class="extra" name="conhecimento" min="0" max="3" value="{{ ficha.conhecimento }}"></label>
+            <label for="pontaria">pontaria: <input type="number" id="pontaria" class="extra" name="pontaria" min="0" max="3" value="{{ ficha.pontaria }}"></label>
+            <label for="furtividade">furtividade: <input type="number" id="furtividade" class="extra" name="furtividade" min="0" max="3" value="{{ ficha.furtividade }}"></label>
+            <label for="atuacao">atuacao: <input type="number" id="atuacao" class="extra" name="atuacao" min="0" max="3" value="{{ ficha.atuacao }}"></label>
+            <label for="iniciativa">iniciativa: <input type="number" id="iniciativa" class="extra" name="iniciativa" min="0" max="3" value="{{ ficha.iniciativa }}"></label>
+        </div>
+    </div>
+
+    <div class="actions">
+    <button type="submit" class="primary">Salvar edições</button>
+    <a href="/sala/{{ ficha.sala_id }}"><button type="button">Cancelar</button></a>
+    </div>
+</form>
+</div>
+{% endblock %}

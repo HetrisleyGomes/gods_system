@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<link rel="stylesheet" href="{{url_for('static', filename='styles/criar_ficha.css')}}">
+<div class="form-container">
+<h2>Criar Ficha</h2>
+
+<div class="back-btn">
+    <a href="/sala/{{ sala_id }}"><button type="button">Voltar</button></a>
+</div>
+
+
+<!-- Recebe sala_id do servidor via Jinja -->
+<form id="criar-ficha-form" action="{{ url_for('fichas.form_criar_ficha') }}" method="POST">
+    <input type="hidden" id="sala_id" name="sala_id" value="{{ sala_id }}">
+    <input type="hidden" id="atributos_json" name="atributos_json">
+
+    <div class="atributos">
+        <label for="nome_personagem">Nome do personagem</label>
+        <input type="text" id="nome_personagem" name="nome_personagem" data-preview="nome_personagem" maxlength="50" required placeholder="Digite o nome do personagem (máx 50 caracteres)">
+    </div>
+
+    <!-- ========== CONSTRUTORES ========== -->
+    <div class="construtores">
+        <h3>Construtores</h3>
+
+        <!-- Cor -->
+        <label for="cor">Cor</label>
+        <select id="cor" name="cor" data-preview="cor" required>
+            <option value="" selected disabled>Selecione uma cor</option>
+            <option value="vermelho">Vermelho</option>
+            <option value="azul">Azul</option>
+            <option value="amarelo">Amarelo</option>
+            <option value="rosa">Rosa</option>
+            <option value="verde">Verde</option>
+            <option value="preto">Preto</option>
+            <option value="branco">Branco</option>
+        </select>
+
+        <!-- Espécie -->
+        <label for="especie">Espécie</label>
+        <select id="especie" name="especie" data-preview="especie" required>
+            <option value="" selected disabled>Selecione uma espécie</option>
+            <option value="humano_Terra">Humanos (Terra)</option>
+            <option value="humano_KO_35">Humanos (KO-35)</option>
+            <option value="humano_Mirinoi">Humanos (Mirinoi)</option>
+            <option value="humano_Shangri_La">Humanos (Shangri-La)</option>
+            <option value="humano_Aradok_Ivantus">Humanos (Aradok Ivantus)</option>
+            <option value="sphynx">Sphynx</option>
+            <option value="sirians">Sirians</option>
+            <option value="android">Android</option>
+            <option value="aquitiano">Aquitiano</option>
+            <option value="sauriano_Teropode">Sauriano (Teropode)</option>
+            <option value="sauriano_Ceratopcian">Sauriano (Ceratopcian)</option>
+            <option value="sauriano_Pterossaurideo">Sauriano (Pterossaurideo)</option>
+            <option value="rafkan">Rafkan</option>
+        </select>
+
+        <!-- Arquétipo -->
+        <label for="arquetipo">Arquétipo</label>
+        <select id="arquetipo" name="arquetipo" data-preview="arquetipo" required>
+            <option value="" selected disabled>Selecione um arquétipo</option>
+            <option value="combatente">Combatente</option>
+            <option value="genio">Gênio</option>
+            <option value="celere">Célere</option>
+            <option value="guardiao">Guardião</option>
+            <option value="peregrino">Peregrino</option>
+            <option value="sobrevivente">Sobrevivente</option>
+            <option value="atirador">Atirador</option>
+            <option value="vanguarda">Vanguarda</option>
+            <option value="a_sombra">A Sombra</option>
+        </select>
+    </div>
+
+    <div id="atributos_container" data-bonus="{{ bonus_construtores }}">
+        <div class="atributos">
+            <h3>Atributos</h3> <span class="white-line">Pontos restantes: </span><span id="pontos-restantes" class="white-line">5</span>
+            <label for="forca_button">forca: <input type="number" id="forca_button" class="extra" data-attr="forca" min="0" max="3" placeholder="0"></label>
+            <label for="constituicao_button">constituicao: <input type="number" id="constituicao_button" class="extra" data-attr="constituicao" min="0" max="3" placeholder="0"></label>
+            <label for="inteligencia_button">inteligencia: <input type="number" id="inteligencia_button" class="extra" data-attr="inteligencia" min="0" max="3" placeholder="0"></label>
+            <label for="destreza_button">destreza: <input type="number" id="destreza_button" class="extra" data-attr="destreza" min="0" max="3" placeholder="0"></label>
+            <label for="carisma_button">carisma: <input type="number" id="carisma_button" class="extra" data-attr="carisma" min="0" max="3" placeholder="0"></label>
+            <hr class="white-line">
+            <label for="combate_button">combate: <input type="number" id="combate_button" class="extra" data-attr="combate" min="0" max="3" placeholder="0"></label>
+            <label for="atletismo_button">atletismo: <input type="number" id="atletismo_button" class="extra" data-attr="atletismo" min="0" max="3" placeholder="0"></label>
+            <label for="tecnologia_button">tecnologia: <input type="number" id="tecnologia_button" class="extra" data-attr="tecnologia" min="0" max="3" placeholder="0"></label>
+            <label for="percepcao_button">percepcao: <input type="number" id="percepcao_button" class="extra" data-attr="percepcao" min="0" max="3" placeholder="0"></label>
+            <label for="conhecimento_button">conhecimento: <input type="number" id="conhecimento_button" class="extra" data-attr="conhecimento" min="0" max="3" placeholder="0"></label>
+            <label for="pontaria_button">pontaria: <input type="number" id="pontaria_button" class="extra" data-attr="pontaria" min="0" max="3" placeholder="0"></label>
+            <label for="furtividade_button">furtividade: <input type="number" id="furtividade_button" class="extra" data-attr="furtividade" min="0" max="3" placeholder="0"></label>
+            <label for="atuacao_button">atuacao: <input type="number" id="atuacao_button" class="extra" data-attr="atuacao" min="0" max="3" placeholder="0"></label>
+            <label for="iniciativa_button">iniciativa: <input type="number" id="iniciativa_button" class="extra" data-attr="iniciativa" min="0" max="3" placeholder="0"></label>
+        </div>
+    </div>
+
+    <div class="actions">
+    <button type="submit" class="primary">Criar Ficha</button>
+    <a href="/sala/{{ sala_id }}"><button type="button">Cancelar</button></a>
+    </div>
+</form>
+</div>
+
+<div class="ficha-preview">
+    <h2>Prévia da Ficha</h2>
+
+    <div class="preview-section">
+        <h3>Informações Básicas</h3>
+        <p><strong>Nome:</strong> <span id="pv-nome_personagem">—</span></p>
+        <p><strong>Vida:</strong> <span id="pv-vida">—</span></p>
+        <p><strong>Energia:</strong> <span id="pv-energia">—</span></p>
+        <p><strong>Armadura:</strong> <span id="pv-armadura">—</span></p>
+    </div>
+
+    <div class="preview-section">
+        <h3>Construtores</h3>
+        <p><strong>Cor:</strong> <span id="pv-cor">—</span></p>
+        <p><strong>Espécie:</strong> <span id="pv-especie">—</span></p>
+        <p><strong>Arquétipo:</strong> <span id="pv-arquetipo">—</span></p>
+    </div>
+
+    <div class="preview-section">
+        <h3>Atributos Principais</h3>
+        <p><strong>Força:</strong> <span id="pv-forca">0</span></p>
+        <p><strong>Constituição:</strong> <span id="pv-constituicao">0</span></p>
+        <p><strong>Inteligência:</strong> <span id="pv-inteligencia">0</span></p>
+        <p><strong>Destreza:</strong> <span id="pv-destreza">0</span></p>
+        <p><strong>Carisma:</strong> <span id="pv-carisma">0</span></p>
+    </div>
+
+    <div class="preview-section">
+        <h3>Atributos Secundários</h3>
+        <p><strong>Combate:</strong> <span id="pv-combate">0</span></p>
+        <p><strong>Atletismo:</strong> <span id="pv-atletismo">0</span></p>
+        <p><strong>Tecnologia:</strong> <span id="pv-tecnologia">0</span></p>
+        <p><strong>Percepção:</strong> <span id="pv-percepcao">0</span></p>
+        <p><strong>Conhecimento:</strong> <span id="pv-conhecimento">0</span></p>
+        <p><strong>Pontaria:</strong> <span id="pv-pontaria">0</span></p>
+        <p><strong>Furtividade:</strong> <span id="pv-furtividade">0</span></p>
+        <p><strong>Atuação:</strong> <span id="pv-atuacao">0</span></p>
+        <p><strong>Iniciativa:</strong> <span id="pv-iniciativa">0</span></p>
+    </div>
+</div>
+
+<script src="/static/js/criar_ficha.js"></script>
+{% endblock %}
