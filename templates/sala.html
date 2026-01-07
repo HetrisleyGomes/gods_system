@@ -38,14 +38,18 @@
     <aside class="logs">
         <h3>Logs</h3>
         <div id="logs-container">
-            <!-- logs irão aparecer aqui via JS -->
         </div>
     </aside>
 
 </div>
+<script>
+    window.INITIAL_DATA = { fichas: {{ fichas | tojson }} };
+    const fichasGerais= window.INITIAL_DATA.fichas;
+</script>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 <script src="/static/js/sockets.js"></script>
 <script src="/static/js/teste.js"></script>
+<script src="/static/js/presala.js"></script>
 <script src="/static/js/sala.js"></script>
 <script src="/static/js/sala_ficha_controller.js"></script>
 <script src="/static/js/sala_mecha_controller.js" defer></script>

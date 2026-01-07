@@ -90,7 +90,7 @@ body {
     flex-direction: column-reverse;
 }
 
-/* Log individual */
+/* LOG ITEM */
 .log-item {
     background: #333;
     padding: 8px;
@@ -125,12 +125,14 @@ body {
 }
 
 /* FICHA */
-.ficha, .mecha-view {
+.ficha, .mecha-view, .mestre-view {
+    display: block;
     background: #1e1e1e;
     color: #eee;
     border-radius: 12px;
     overflow: hidden;
     font-family: system-ui, sans-serif;
+    min-width: 100px;
 }
 
 /* TOPO */
@@ -286,6 +288,114 @@ body {
     margin-bottom: 8px;
 }
 
+/* MESTRE */
+.mestre-header {
+    background-color: #333;
+    padding: 16px;
+}
+
+.controllers {
+    padding: 10px 4rem;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.controller-input {
+    background: #1f1f1f;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    width: 150px;
+    text-align: center;
+    outline: none;
+    transition: border .15s, background .15s;
+}
+
+.controller-input:focus {
+    border-color: #5c9cff;
+    background: #252525;
+}
+
+.roll-btn {
+    background: #2b2b2b;
+    border: none;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform .15s, background .15s;
+}
+
+.roll-btn:hover {
+    background: #3a3a3a;
+    transform: translateY(-1px);
+}
+
+.roll-btn:active {
+    transform: scale(0.97);
+}
+
+.notebook {
+    background: #1a1a1a;
+    border: 1px solid #2c2c2c;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notebook .notes {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #eee;
+    font-family: system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 10px;
+    resize: vertical;
+    min-height: 140px;
+    outline: none;
+    transition: border .15s, background .15s;
+}
+
+.notebook .notes:focus {
+    border-color: #5c9cff;
+    background: #161616;
+}
+
+.notebook .save-notes {
+    align-self: flex-end;
+    background: #2b2b2b;
+    border: none;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform .15s, background .15s;
+}
+
+.notebook .save-notes:hover {
+    background: #3a3a3a;
+    transform: translateY(-1px);
+}
+
+.notebook .save-notes:active {
+    transform: scale(0.97);
+}
+
+.notebook .save-notes:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* CORES */
 .vermelho {
     background-color: #ac1818;
 }

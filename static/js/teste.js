@@ -8,9 +8,13 @@ document.addEventListener("click", e => {
     const mechaPoder = e.target.closest(".poder-mecha");
     if (mechaPoder) anunciarPoderMecha(mechaPoder);
 
-
     const equipamento = e.target.closest(".equipamento");
     if (equipamento) executarAtaque(equipamento);
+
+    const mestreBtn = e.target.closest(".roll-btn");
+    if (mestreBtn) {
+        executarTesteMestre(mestreBtn);
+    }
 });
 
 function executarTeste(btn) {
@@ -79,6 +83,43 @@ function executarAtaque(equipamento) {
         rolagem: rolagem.valores,
         total
     });
+
+    emitirLog(salaId, log);
+}
+
+function executarTesteMestre(btn) {
+    console.log("VEIO")
+    const group = btn.closest(".roll-group");
+    console.log("GROUP")
+    console.log(group)
+    if (!group) return;
+
+    const modInput = group.querySelector('[data-tipo="mod"]');
+    const diceInput = group.querySelector('[data-tipo="dice"]');
+    console.log("Mod e Dice inputs:")
+    console.log(modInput)
+    console.log(diceInput)
+
+    const modificador = modInput ? Number(modInput.value) || 0 : 0;
+    const dado = diceInput?.value || btn.dataset.roll || "2d6";
+    console.log("DADO")
+
+    console.log(dado)
+
+    const rolagem = rolarDados(dado);
+    const resultadoFinal = rolagem.total + modificador;
+    console.log("rolagem")
+    console.log(rolagem)
+
+    const log = formatarLogMestre({
+        origem: "mestre",
+        dado,
+        modificador,
+        rolagem: rolagem.valores,
+        total: resultadoFinal
+    });
+
+    const salaId = document.getElementById("sala_id").value;
 
     emitirLog(salaId, log);
 }
@@ -191,6 +232,22 @@ function formatarLogPoder(data) {
     } = data;
 
     return `<div class="log-item"><strong>${personagem}</strong> usou <strong>[${nome}]</strong> → <small>${descricao}</small></div>`;
+}
+
+function formatarLogMestre(data) {
+    const {
+        origem,
+        dado,
+        modificador,
+        rolagem,
+        total
+    } = data;
+
+    const modStr = modificador !== 0
+        ? ` + ${modificador}`
+        : "";
+
+    return `<div class="log-item"><strong>${origem}</strong>: <span class="log-dados">[${dado}${modStr}]</span> → <span class="log-resultado">${total}</span> <small>(rolagem: ${rolagem.join(", ")})</small></div>`;
 }
 
 function adicionarLog(html) {

@@ -102,7 +102,6 @@ class FichaController:
     def get_ficha_tudo(self, id):
         try:
             rows = self.__repository.get_ficha_poderes(id)
-            # 1) Pega apenas a primeira linha para montar a ficha
             data = {
                 "id": rows[0][0],
                 "sala_id": rows[0][1],
@@ -137,7 +136,6 @@ class FichaController:
             equipamentos_ids = []
             poderes_ids = []
 
-            # 2) Adiciona os poderes (se existirem)
             for row in rows:
                 if row[27] is not None and row[27] not in poderes_ids:
                     poderes_ids.append(row[27])
@@ -147,7 +145,6 @@ class FichaController:
                         "descricao": row[29]
                     })
             
-            # 3) Adiciona os equipamentos (se existirem)
             for row in rows:
                 if row[30] is not None and row[30] not in equipamentos_ids:
                     equipamentos_ids.append(row[30])
@@ -159,7 +156,6 @@ class FichaController:
                         "efeito": row[34],
                         "dano": row[35]
                     })
-
 
             return {
                 "body": data, "status": 200,

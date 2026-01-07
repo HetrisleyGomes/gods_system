@@ -73,6 +73,17 @@ class SalaRepository:
         self.__conn.commit()
         cursor.close()
 
+    def set_notes(self, id, notes):
+        cursor = self.__conn.cursor()
+        cursor.execute(
+            """
+            UPDATE sala SET notes = %s WHERE id = %s
+            """,
+            (notes, id)
+        )
+        self.__conn.commit()
+        cursor.close()
+
     def remove_fichas(self, ficha_id):
         cursor = self.__conn.cursor()
         cursor.execute(

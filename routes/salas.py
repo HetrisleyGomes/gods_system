@@ -1,14 +1,6 @@
 from flask import render_template, url_for, request, redirect, Blueprint, jsonify, send_file, g, flash, session
 from flask_login import login_user, logout_user, login_required
-#from datetime import date
-#from io import StringIO, BytesIO
-#from pathlib import Path
-#import pandas as pd
-#import json
 import psycopg2
-
-#from src.models.repositories.requisicoes_repository import RequisicoesRepository
-#from src.controllers.requisicao_controller import RequisicaoController
 
 from controllers.sala_controller import SalaController
 from controllers.ficha_controller import FichaController
@@ -61,7 +53,6 @@ def main():
     if salas_request['status'] == 200:
         salas = salas_request['body']
 
-    
     return render_template("main.html", salas = salas)
 
 
@@ -91,7 +82,6 @@ def form_sala():
 
         body = {'nome': nome, 'senha': senha, 'codigo': codigo}
         response = controller.create(body)
-        print("""final: {{response['status']}}""")
         if response['status'] == 200:
             flash("Sala criada com sucesso!")
             return redirect(f"/sala/{response['body']}")
@@ -123,7 +113,6 @@ def sala_view(id):
 
     return render_template('sala.html', sala=sala, fichas=fichas)
 
-
 @salas_bp.route("/sala/<string:sala_id>/mestre/status")
 def status_mestre(sala_id):
     is_mestre = session.get(f"mestre_sala_{sala_id}", False)
@@ -134,11 +123,11 @@ def status_mestre(sala_id):
 
 @salas_bp.route("/sala/<string:sala_id>/mestre/login", methods=["POST"])
 def login_mestre(sala_id):
-    # Obter form
+    # Obtem o form
     data = request.json
     senha = data.get("senha")
 
-    # Obter informações da sala
+    # Obtem informações da sala
     connection = get_db_connection()
     if connection is None:
         return "Erro ao conectar ao banco de dados.", 500
@@ -149,7 +138,7 @@ def login_mestre(sala_id):
 
     SENHA_SALA = sala_request['body']['senha']
 
-    # Verificar senha
+    # Verifica senha
     if senha != SENHA_SALA:
         return jsonify({"success": False}), 401
 
@@ -159,11 +148,10 @@ def login_mestre(sala_id):
 
 @salas_bp.route("/sala/<string:sala_id>/mestre/notes")
 def get_notes_mestre(sala_id):
-
     if not session.get(f"mestre_sala_{sala_id}"):
         return jsonify({"error": "Não autorizado"}), 403
 
-    # Obter informações da sala
+    # Obtem informações da sala
     connection = get_db_connection()
     if connection is None:
         return "Erro ao conectar ao banco de dados.", 500
@@ -173,8 +161,45 @@ def get_notes_mestre(sala_id):
     notes = controller.get_notes(sala_id)
 
     return jsonify({
-        "notes": notes['body']
+        "id": sala_id,
+        "notes": notes['body'][0]
     })
+
+@salas_bp.route("/sala/<string:sala_id>/mestre/notes-update", methods=["POST"])
+def update_notes_mestre(sala_id):
+    if not session.get(f"mestre_sala_{sala_id}"):
+        return jsonify({"error": "Não autorizado"}), 403
+
+    # Obtem form
+    data = request.get_json()
+    if not data or "notes" not in data:
+        return jsonify({"error": "Dados inválidos"}), 400
+
+    notas = data["notes"]
+
+    if not isinstance(notas, str):
+        return jsonify({"error": "Formato inválido de notas"}), 400
+
+    # Obtem informações da sala
+    connection = get_db_connection()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados.", 500
+
+    try:
+        repository = SalaRepository(connection)
+        controller = SalaController(repository)
+        resp = controller.set_notes(sala_id, notas)
+
+        if not resp:
+            return jsonify({"error": "Sala não encontrada"}), 404
+
+        return jsonify({
+            "id": sala_id,
+            "notes": notas
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 @salas_bp.route("/sala/<string:sala_id>/logs")
 def get_logs(sala_id):
@@ -196,11 +221,3 @@ def handle_log(data):
         SALA_LOGS[sala_id].pop(0)
 
     emit("log_sync", {"log": log}, room=sala_id)
-
-#@salas_bp.route('/criar_sala', methods=['POST'])
-#def criar_sala():
-#    codigo = ''.join(random.choices(string.ascii_uppercase, k=5))
-#    nova_sala = Sala(codigo=codigo)
-#    db.session.add(nova_sala)
-#    db.session.commit()
-#    return jsonify({'codigo': codigo})

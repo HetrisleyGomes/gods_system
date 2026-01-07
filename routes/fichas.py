@@ -64,7 +64,7 @@ def form_criar_ficha():
     especie = request.form.get("especie")
     arquetipo = request.form.get("arquetipo")
 
-    # AQUI OS ATRIBUTOS
+    # ATRIBUTO
     atributos_json = request.form.get("atributos_json")
     atributos = json.loads(atributos_json)
 
@@ -118,7 +118,7 @@ def ficha_json(ficha_id):
     
     repository = FichaRepository(connection)
     controller = FichaController(repository)
-    ficha = controller.get_ficha_tudo(ficha_id)  # retorna dict
+    ficha = controller.get_ficha_tudo(ficha_id)
 
     return jsonify(ficha)
 
@@ -191,7 +191,6 @@ def form_editar_ficha():
     vida_atual = request.form.get("vida_atual")
     energia_atual = request.form.get("energia_atual")
 
-
     ficha = {
         "id": ficha_id,
         "sala_id": sala_id,
@@ -221,9 +220,7 @@ def form_editar_ficha():
         "vida_atual": vida_atual,
         "energia_atual": energia_atual,
     }
-    print(ficha)
     response = controller.edit_ficha(ficha_id, ficha)
-    print(response)
     return redirect(f"/sala/{sala_id}")
 
 

@@ -50,8 +50,6 @@
     padding: 4px;
 }
 
-
-/* Chrome, Edge, Safari */
 .poder-descricao::-webkit-scrollbar {
   width: 8px;
   height: 8px;

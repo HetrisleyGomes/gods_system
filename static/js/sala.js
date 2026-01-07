@@ -59,29 +59,34 @@ async function verificarMestre() {
 }
 
 
-function renderMestre(notes) {
+function renderMestre(data) {
     const html = `
-        <session class="mestre">
+        <session class="mestre-view">
         <!-- TOPO -->
         <header class="mestre-header">
             <h2 class="nome-personagem">Mestre</h2>
         </header>
-        <div class="controllers">
+        <div class="controllers roll-group">
         <div>
             <label for="modificator-master">Modificador</label>
-            <input type="number" class="" data-tipo="mod" data-id="mod" id="modificator-master">
-            <button class="roll">Teste</button>
+            <input type="number" class="controller-input" data-tipo="mod" id="modificator-master" placeholder="0">
         </div>
         <div>
             <label for="dice-master">Dado</label>
-            <input type="text" class="dice" data-tipo="dice" data-id="dice" id="dice-master">
-            <button class="roll">Rolar dado</button>
+            <input type="text" class="controller-input" data-tipo="dice" id="dice-master" placeholder="2d6">
+            <button class="roll-btn" data-origem="mestre">Rolar dado</button>
         </div>
         </div>
         <div class="notebook">
-            <textarea class="notes">${notes ?? ""}</textarea>
-            <button class="save-notes">Salvar notas</button>
+            <textarea class="notes" id="notes">${data['notes'] ?? ""}</textarea>
+            <button class="save-notes" data-id="${data.id}">Salvar notas</button>
         </div>
+        </session>
+
+        <session>
+            <div class="">
+                ${renderfichas(fichasGerais)}
+            </div>
         </session>
     `;
 
@@ -226,6 +231,12 @@ function renderPoderes(poderes, ficha) {
             <p>${p.descricao.replace(/\r?\n/g, "<br>")}</p>
         </div>
     `).join("");
+}
+
+function renderfichas(fichas) {
+    return fichas.map(p => `
+        <p> ficha ${p.nome_personagem} </p>
+        `).join("");
 }
 
 // LOGS

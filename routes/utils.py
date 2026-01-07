@@ -212,13 +212,11 @@ def mecha_router(ficha_id):
         ficha_controller = FichaController(ficha_repository)
         ficha = ficha_controller.get_ficha(ficha_id)
         return jsonify({"has_mecha": True, "mecha":mecha, "ficha":ficha})
-        #return redirect(url_for("utils.ver_mecha", mecha_id=mecha['body']["id"]))
     else:
         return jsonify({
             "has_mecha": False,
             "redirect_to": url_for("utils.criar_mecha", ficha_id=ficha_id)
         })
-        #return redirect(url_for("utils.criar_mecha", ficha_id=ficha_id))
 
 @utils_bp.route("/criar_mecha/<string:ficha_id>/")
 def criar_mecha(ficha_id):

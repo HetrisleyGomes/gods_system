@@ -6,6 +6,17 @@ document.addEventListener("click", e => {
     iniciarEdicaoStatus(status);
 });
 
+document.addEventListener("click", e => {
+    const button = e.target.closest(".save-notes");
+    if (!button) return;
+
+    const nota = document.getElementById("notes").value;
+    const id = button.dataset.id;
+    if (!nota) return;
+    
+    save_note(id, nota);
+});
+
 function iniciarEdicaoStatus(status) {
     const tipo = status.dataset.tipo; // vida ou energia
     const atual = Number(status.dataset.atual);
@@ -32,7 +43,6 @@ function iniciarEdicaoStatus(status) {
         if (e.key === "Escape") cancelarEdicaoStatus(status);
     });
 }
-
 
 function finalizarEdicaoStatus(status, input) {
     const novoValor = Math.max(0, Math.min(
@@ -80,8 +90,6 @@ async function salvar_backend(tipo, valor, id){
     try {
         const response = await fetch(`/ficha/${id}/${type}/${valor}`);
         if (!response.ok) throw new Error("Erro ao salvar status da ficha");
-
-        const data = await response.json();
     } catch (err) {
         console.error(err);
         alert("Erro ao carregar a ficha");
@@ -89,6 +97,28 @@ async function salvar_backend(tipo, valor, id){
         hideLoader();
     }
     
+}
+
+async function save_note(id, note) {
+    showLoader("Salvando notas...");
+    try {
+        const response = await fetch(`/sala/${id}/mestre/notes-update`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ notes: note })
+        });
+
+        if (!response.ok) throw new Error("Erro ao salvar suas notas");
+
+        const data = await response.json();
+        renderMestre(data);
+
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao carregar a ficha");
+    } finally {
+        hideLoader();
+    }
 }
 
 socket.on("status_sync", data => {
@@ -110,7 +140,6 @@ function atualizarStatusNoDOM(fichaId, tipo, valor) {
 
     status.querySelector(".valor").textContent = valor;
 }
-
 
 
 /* TROCAR FICHA  */

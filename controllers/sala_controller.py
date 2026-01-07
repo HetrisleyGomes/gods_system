@@ -86,3 +86,14 @@ class SalaController:
             return {
                 "body": str(e), "status": 400,
             }
+    
+    def set_notes(self, id, notes):
+        try:
+            raw = self.__repository.set_notes(id, notes)
+            return {
+                "body": raw, "status": 200,
+            }
+        except Exception as e:
+            return {
+                "body": str(e), "status": 400,
+            }

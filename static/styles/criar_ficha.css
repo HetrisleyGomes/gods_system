@@ -53,15 +53,14 @@ button {
     color: #fff;
     padding: 20px;
     border-radius: 10px;
-    height: 90vh; /* FIXA uma altura máxima */
-    overflow-y: auto; /* Habilita scroll apenas dentro dela */
-    position: fixed;       /* << ATIVA a fixação */
-    top: 30px;             /* distância do topo da tela */
+    height: 90vh; 
+    overflow-y: auto;
+    position: fixed;
+    top: 30px;
     right: 12px; 
     box-shadow: 0 0 20px rgba(0,0,0,0.4);
     font-family: Arial, sans-serif;
 }
-
 
 .ficha-preview h2 {
     margin-top: 0;
@@ -130,9 +129,9 @@ button {
 /* Botão de retorno*/
 .back-btn {
     border-radius: 10px;
-    overflow-y: auto; /* Habilita scroll apenas dentro dela */
-    position: fixed;       /* << ATIVA a fixação */
-    top: 30px;             /* distância do topo da tela */
+    overflow-y: auto;
+    position: fixed;
+    top: 30px;
     left: 20px; 
     box-shadow: 0 0 20px rgba(0,0,0,0.4);
     font-family: Arial, sans-serif;
