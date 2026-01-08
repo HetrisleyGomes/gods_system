@@ -137,7 +137,7 @@ body {
 
 /* TOPO */
 .ficha-header {
-    border-top: 6px solid var(--cor-personagem);
+    border-top: 6px solid #222;
     padding: 16px;
 }
 
@@ -395,6 +395,119 @@ body {
     transform: none;
 }
 
+/* MINI FICHA MESTRE */
+session.players-view {
+    padding: 10px;
+    display: block;
+    margin-top: 10px;
+}
+
+.mini-ficha-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.mini-ficha {
+    background: #333;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: #222 solid 4px;
+}
+
+.mini-ficha-header {
+    position: relative;
+    padding: 8px 12px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #1e1e1e;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.mini-ficha-header .nome-personagem {
+    color: #fff;
+    font-size: 22px;
+    position: relative;
+    margin-left: 8px;
+    z-index: 2;
+}
+
+.mini-ficha-header .mini-cor {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 8px;
+    height: 100%;
+    opacity: 1;
+}
+
+.bars-container {
+    display: grid;
+    gap: 6px;
+}
+
+.life-bar-container, .energy-bar-container {
+    height: 20px;
+    background: #111111;
+    border-radius: 12px;
+    padding: 0 6px;
+    display: flex;
+    align-items: center;
+}
+
+.life-bar {
+    height: 14px;
+    background: #ac1818;
+    border-radius: 10px;
+}
+
+.energy-bar {
+    height: 14px;
+    background: #1addeb;
+    border-radius: 10px;
+}
+
+.mini-status {
+    padding: 20px 0 0;
+}
+
+.mini-status-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.mini-status-item {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #222;
+    height: 54px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    font-size: 18px;
+    font-weight: 600;
+    text-shadow:
+      2px 2px 2px #000,
+     -2px 2px 2px #000,
+      2px -2px 2px #000,
+     -2px -2px 2px #000;
+}
+
+.mini-status-item::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.25;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 80%;
+}
+
 /* CORES */
 .vermelho {
     background-color: #ac1818;
@@ -416,4 +529,24 @@ body {
 }
 .branco {
     background-color: #a9e6e2;
+}
+
+.mini-status-item.forca::before {
+    background-image: url("/static/images/forca.svg");
+}
+
+.mini-status-item.constituicao::before {
+    background-image: url("/static/images/constituicao.svg");
+}
+
+.mini-status-item.inteligencia::before {
+    background-image: url("/static/images/intelecto.svg");
+}
+
+.mini-status-item.destreza::before {
+    background-image: url("/static/images/destreza.svg");
+}
+
+.mini-status-item.carisma::before {
+    background-image: url("/static/images/carisma.svg");
 }

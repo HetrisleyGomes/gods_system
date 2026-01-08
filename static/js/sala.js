@@ -51,15 +51,25 @@ async function verificarMestre() {
             return;
         }
     }
+    showLoader("Carregando Mestre...");
+    try {
+        const notesResp = await fetch(`/sala/${salaId}/mestre/notes`);
+        const data = await notesResp.json();
 
-    const notesResp = await fetch(`/sala/${salaId}/mestre/notes`);
-    const data = await notesResp.json();
+        const fichasResp = await fetch(`/sala/${salaId}/get_fichas`);
+        const fichas = await fichasResp.json();
 
-    renderMestre(data);
+        renderMestre(data, fichas);
+    } catch (err) {
+            console.error(err);
+            alert("Erro ao carregar mestre");
+    } finally {
+        hideLoader();
+    }
 }
 
 
-function renderMestre(data) {
+function renderMestre(data, fichas) {
     const html = `
         <session class="mestre-view">
         <!-- TOPO -->
@@ -83,9 +93,9 @@ function renderMestre(data) {
         </div>
         </session>
 
-        <session>
-            <div class="">
-                ${renderfichas(fichasGerais)}
+        <session class="players-view">
+            <div class="mini-ficha-container">
+                ${renderfichas(fichas)}
             </div>
         </session>
     `;
@@ -235,7 +245,41 @@ function renderPoderes(poderes, ficha) {
 
 function renderfichas(fichas) {
     return fichas.map(p => `
-        <p> ficha ${p.nome_personagem} </p>
+        <div class="mini-ficha" id="mini-ficha-${p.id}">
+            <header class="mini-ficha-header">
+                <p class="nome-personagem"> ${p.nome_personagem} </p>
+                <div class="mini-cor ${p.cor}"></div>
+            </header>
+            <div class="bars-container" title="Vida">
+                <div class="life-bar-container">
+                    <div class="life-bar" data-max="${p.vida}" style="width: ${p.vida_atual / p.vida * 100}%">
+                    </div>
+                </div>
+                <div class="energy-bar-container" title="Energia">
+                    <div class="energy-bar" data-max="${p.energia}" style="width: ${p.energia_atual / p.energia * 100}%">
+                    </div>
+                </div>
+            </div>
+            <div class="mini-status">
+                <div class="mini-status-container">
+                    <div class="mini-status-item forca" title="Força">
+                     ${p.forca}
+                    </div>
+                    <div class="mini-status-item constituicao" title="Constituição">
+                     ${p.constituicao}
+                    </div>
+                    <div class="mini-status-item inteligencia" title="Inteligência">
+                     ${p.inteligencia}
+                    </div>
+                    <div class="mini-status-item destreza" title="Destreza">
+                     ${p.destreza}
+                    </div>
+                    <div class="mini-status-item carisma" title="Carisma">
+                     ${p.carisma}
+                    </div>
+                </div>
+            </div>
+        </div>
         `).join("");
 }
 

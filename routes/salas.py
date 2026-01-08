@@ -165,6 +165,27 @@ def get_notes_mestre(sala_id):
         "notes": notes['body'][0]
     })
 
+@salas_bp.route("/sala/<string:sala_id>/get_fichas")
+def get_fichas_sala(sala_id):
+    # Obtem informações da sala
+    connection = get_db_connection()
+    if connection is None:
+        return "Erro ao conectar ao banco de dados.", 500
+    
+    frepository = FichaRepository(connection)
+    fcontroller = FichaController(frepository)
+    
+    fichas_request = fcontroller.get_fichas_por_sala(sala_id)
+    
+    if fichas_request['status'] == 200:
+        fichas = fichas_request['body']
+    else:
+        fichas = []
+
+    return jsonify(
+        fichas
+    )
+
 @salas_bp.route("/sala/<string:sala_id>/mestre/notes-update", methods=["POST"])
 def update_notes_mestre(sala_id):
     if not session.get(f"mestre_sala_{sala_id}"):

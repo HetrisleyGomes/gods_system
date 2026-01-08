@@ -127,6 +127,12 @@ socket.on("status_sync", data => {
         data.tipo,
         data.valor
     );
+    console.log(data)
+    atualizarMiniFicha(
+        data.ficha_id,
+        data.tipo,
+        data.valor
+    );
 });
 
 function atualizarStatusNoDOM(fichaId, tipo, valor) {
@@ -141,6 +147,24 @@ function atualizarStatusNoDOM(fichaId, tipo, valor) {
     status.querySelector(".valor").textContent = valor;
 }
 
+function atualizarMiniFicha(fichaId, tipo, valorAtual) {
+    const miniFicha = document.getElementById(`mini-ficha-${fichaId}`);
+    if (!miniFicha) return;
+
+    if (tipo === "vida") {
+        const lifeBar = miniFicha.querySelector(".life-bar");
+        const maxVida = Number(lifeBar.dataset.max); // vamos ajustar isso
+        const percent = (valorAtual / maxVida) * 100;
+        lifeBar.style.width = `${percent}%`;
+    }
+
+    if (tipo === "energia") {
+        const energyBar = miniFicha.querySelector(".energy-bar");
+        const maxEnergia = Number(energyBar.dataset.max);
+        const percent = (valorAtual / maxEnergia) * 100;
+        energyBar.style.width = `${percent}%`;
+    }
+}
 
 /* TROCAR FICHA  */
 function trocarView(novoHTML) {
